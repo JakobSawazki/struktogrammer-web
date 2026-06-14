@@ -6,8 +6,9 @@ Python-Einstieg und Abiturvorbereitung reduziert.
 
 ## Funktionen
 
-- Sieben Kernbausteine: Sequenz, Eingabe, Ausgabe, Entscheidung, While-Schleife,
-  Zählschleife und Subroutine
+- Fachlich getrennte Bausteine für Zuweisung, Deklaration und Initialisierung,
+  Deklaration und Einlesen, Einlesen und Ausgabe
+- Verzweigung, Mehrfachverzweigung, While-Schleife, Zählschleife und Subroutine
 - Drag-and-drop in Hauptbereich, Schleifen und Dann-/Sonst-Zweige
 - Touch-Alternative durch Antippen von Baustein und Einfügeposition
 - Direkte Textbearbeitung sowie Duplizieren, Löschen und Verschieben
@@ -15,7 +16,8 @@ Python-Einstieg und Abiturvorbereitung reduziert.
 - Automatische Zwischenspeicherung im Browser
 - SVG- und PNG-Export
 - Saubere Druckansicht
-- Drei integrierte Beispiele und eine einfache Grundprüfung
+- Leerer Start ohne vorgegebene Musterlösung
+- Direkter Verweis auf die offizielle Operatorenliste und eine einfache Grundprüfung
 
 ## Start
 

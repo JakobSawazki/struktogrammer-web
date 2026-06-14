@@ -11,29 +11,38 @@
 <body>
   <svg class="svg-sprite" aria-hidden="true">
     <symbol id="icon-new" viewBox="0 0 24 24">
-      <path d="M7 3.5h7l4 4V20.5H7z"></path>
-      <path d="M14 3.5v4h4M9.5 14h5M12 11.5v5"></path>
+      <path d="M6.5 2.75h8l4.75 4.75v13.75H6.5z"></path>
+      <path d="M14.5 2.75V7.5h4.75M9.25 14.25h6M12.25 11.25v6"></path>
+      <path d="M4.75 5.25v16h11.5"></path>
     </symbol>
     <symbol id="icon-open" viewBox="0 0 24 24">
-      <path d="M3.5 7.5h6l2-2h4.5a2 2 0 0 1 2 2v2"></path>
-      <path d="M4.5 9.5h16l-2.2 9H2.8z"></path>
+      <path d="M3 7.25h6.1l2-2.25h5.65a2 2 0 0 1 2 2v2.25"></path>
+      <path d="M4.25 9.25H21l-2.35 9.5H2.5z"></path>
+      <path d="M6.25 12.25h10.5"></path>
     </symbol>
     <symbol id="icon-save" viewBox="0 0 24 24">
-      <path d="M4 3.5h13l3 3V20.5H4z"></path>
-      <path d="M8 3.5v6h8v-6M8 20.5v-7h8v7"></path>
+      <path d="M3.5 2.75h13.75l3.25 3.25v15.25h-17z"></path>
+      <path d="M7.25 2.75v6.5h9.5v-6.5M7.5 21.25v-8h9v8"></path>
+      <path d="M14.25 5.25h.01M9.75 16.25h4.5"></path>
     </symbol>
     <symbol id="icon-image" viewBox="0 0 24 24">
-      <rect x="3.5" y="4" width="17" height="16" rx="1.5"></rect>
-      <circle cx="9" cy="9" r="1.5"></circle>
-      <path d="m5.5 17 4.2-4.5 3.1 3 2.2-2.2 3.5 3.7"></path>
+      <rect x="2.75" y="3.25" width="18.5" height="17.5" rx="1.75"></rect>
+      <circle cx="8.25" cy="8.75" r="1.6"></circle>
+      <path d="m4.75 17.75 4.8-5.1 3.2 3.15 2.35-2.4 4.15 4.35"></path>
+      <path d="M17.75 5.75h1"></path>
+    </symbol>
+    <symbol id="icon-operators" viewBox="0 0 24 24">
+      <path d="M3.25 3.25h7.5a2.5 2.5 0 0 1 2.25 1.4v16.1a2.5 2.5 0 0 0-2.25-1.4h-7.5z"></path>
+      <path d="M20.75 3.25h-7.5A2.5 2.5 0 0 0 11 4.65v16.1a2.5 2.5 0 0 1 2.25-1.4h7.5z"></path>
+      <path d="M5.75 7h3M5.75 10h3M15.25 7h3M15.25 10h3M15.25 13h3"></path>
     </symbol>
     <symbol id="icon-print" viewBox="0 0 24 24">
-      <path d="M7 8V3.5h10V8M7 17H4.5A1.5 1.5 0 0 1 3 15.5v-5A1.5 1.5 0 0 1 4.5 9h15a1.5 1.5 0 0 1 1.5 1.5v5a1.5 1.5 0 0 1-1.5 1.5H17"></path>
-      <path d="M7 14h10v6.5H7zM17.5 12h.01"></path>
+      <path d="M6.75 8V2.75h10.5V8M6.75 17H4.5a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h15a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2.25"></path>
+      <path d="M6.75 13.75h10.5v7.5H6.75zM18 11.25h.01M9.25 17h5.5"></path>
     </symbol>
     <symbol id="icon-check" viewBox="0 0 24 24">
-      <circle cx="12" cy="12" r="8.5"></circle>
-      <path d="m8 12.2 2.5 2.5L16.5 9"></path>
+      <path d="M12 2.75 20 6v5.45c0 4.7-3.2 8.25-8 9.8-4.8-1.55-8-5.1-8-9.8V6z"></path>
+      <path d="m8.25 11.9 2.45 2.45 5.25-5.3"></path>
     </symbol>
     <symbol id="icon-help" viewBox="0 0 24 24">
       <circle cx="12" cy="12" r="8.5"></circle>
@@ -89,9 +98,17 @@
           <svg><use href="#icon-image"></use></svg>
           <span>Bild</span>
         </button>
+        <a class="tool-button" id="operatorListButton" href="https://www.schule-bw.de/faecher-und-schularten/mathematisch-naturwissenschaftliche-faecher/informatik/material/materialien-zum-neuen-bildungsplan-informatik-an-den-nichtgewerblichen-beruflichen-gymnasien/operatorenliste-fuer-struktogramme-v2-2.pdf" target="_blank" rel="noreferrer" title="Offizielle Operatorenliste öffnen">
+          <svg><use href="#icon-operators"></use></svg>
+          <span>Operatoren</span>
+        </a>
         <button class="tool-button" id="printButton" type="button">
           <svg><use href="#icon-print"></use></svg>
           <span>Drucken</span>
+        </button>
+        <button class="tool-button" id="validateButton" type="button">
+          <svg><use href="#icon-check"></use></svg>
+          <span>Prüfen</span>
         </button>
       </nav>
     </header>
@@ -109,10 +126,6 @@
         </div>
         <p class="palette-intro">Ziehen oder antippen, dann eine blaue Einfügestelle wählen.</p>
         <div class="block-list" id="blockList"></div>
-        <div class="palette-note">
-          <strong>Tipp</strong>
-          <span>Bausteine lassen sich auch in Schleifen und in beide Zweige einer Entscheidung ziehen.</span>
-        </div>
       </aside>
 
       <section class="stage">
@@ -120,21 +133,6 @@
           <div class="title-field">
             <label for="diagramTitle">Titel des Struktogramms</label>
             <input id="diagramTitle" type="text" maxlength="120" autocomplete="off">
-          </div>
-          <div class="stage-header-actions">
-            <label class="example-field" for="exampleSelect">
-              <span>Beispiel</span>
-              <select id="exampleSelect">
-                <option value="">Auswählen</option>
-                <option value="factorial">Fakultät berechnen</option>
-                <option value="maximum">Maximum zweier Zahlen</option>
-                <option value="counting">Zählschleife</option>
-              </select>
-            </label>
-            <button class="secondary-button" id="validateButton" type="button">
-              <svg><use href="#icon-check"></use></svg>
-              Prüfen
-            </button>
           </div>
         </div>
 
@@ -148,6 +146,8 @@
             <button type="button" data-selection-action="duplicate"><svg><use href="#icon-copy"></use></svg>Duplizieren</button>
             <button type="button" data-selection-action="up"><svg><use href="#icon-up"></use></svg>Nach oben</button>
             <button type="button" data-selection-action="down"><svg><use href="#icon-down"></use></svg>Nach unten</button>
+            <button type="button" data-selection-action="add-case" hidden>+ Fall</button>
+            <button type="button" data-selection-action="remove-case" hidden>− Fall</button>
             <button class="danger-action" type="button" data-selection-action="delete"><svg><use href="#icon-delete"></use></svg>Löschen</button>
           </div>
         </div>
@@ -160,10 +160,7 @@
 
         <div class="stage-scroll" id="stageScroll">
           <article class="paper">
-            <div class="paper-meta">
-              <span>STRUKTOGRAMM</span>
-              <span id="elementCount">0 Bausteine</span>
-            </div>
+            <span class="visually-hidden" id="elementCount">0 Bausteine</span>
             <div class="diagram-wrap" id="diagram" aria-live="polite"></div>
             <div class="print-meta">Erstellt mit Struktogrammer Web · <span id="printDate"></span></div>
           </article>
@@ -195,8 +192,12 @@
       </section>
       <section>
         <h3>Fachliche Schreibweise</h3>
-        <p>Die Vorlagen orientieren sich an der Operatorenliste für Struktogramme der Abiturprüfung Baden-Württemberg, Version 2.2 vom 1. September 2024.</p>
+        <p>Die Bausteine orientieren sich an der Operatorenliste für Struktogramme der Abiturprüfung Baden-Württemberg, Version 2.2 vom 1. September 2024.</p>
         <p><a href="https://www.schule-bw.de/faecher-und-schularten/mathematisch-naturwissenschaftliche-faecher/informatik/material/materialien-zum-neuen-bildungsplan-informatik-an-den-nichtgewerblichen-beruflichen-gymnasien/operatorenliste-fuer-struktogramme-v2-2.pdf" target="_blank" rel="noreferrer">Offizielle Operatorenliste öffnen</a></p>
+      </section>
+      <section>
+        <h3>Bausteine</h3>
+        <div class="operator-help-list" id="operatorHelpList"></div>
       </section>
       <section class="shortcut-list">
         <h3>Tastatur</h3>

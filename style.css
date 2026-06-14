@@ -167,18 +167,20 @@ svg {
   border-radius: 9px;
   color: #3a4659;
   background: transparent;
+  text-decoration: none;
   transition: color 0.16s ease, background 0.16s ease, border-color 0.16s ease;
 }
 
 .tool-button:hover {
   color: var(--primary-dark);
-  border-color: #d7e0fb;
-  background: var(--primary-faint);
+  border-color: #cbd7f7;
+  background: linear-gradient(180deg, #ffffff, #f1f5ff);
+  box-shadow: 0 6px 16px rgba(49, 87, 213, 0.1);
 }
 
 .tool-button svg {
-  width: 22px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
   fill: none;
   stroke: currentColor;
   stroke-width: 1.7;
@@ -283,7 +285,7 @@ svg {
   gap: 11px;
   padding: 10px;
   border: 1px solid var(--line);
-  border-radius: 11px;
+  border-radius: 12px;
   color: var(--ink);
   background: var(--panel);
   box-shadow: 0 1px 1px rgba(34, 48, 73, 0.02);
@@ -309,9 +311,11 @@ svg {
   height: 42px;
   display: grid;
   place-items: center;
-  border-radius: 9px;
+  border: 1px solid #d8e1fb;
+  border-radius: 10px;
   color: var(--primary-dark);
-  background: var(--primary-soft);
+  background: linear-gradient(145deg, #f8faff, #e5ecff);
+  box-shadow: inset 0 1px 0 #ffffff, 0 3px 8px rgba(49, 87, 213, 0.08);
 }
 
 .block-icon svg {
@@ -349,25 +353,13 @@ svg {
 
 .drag-grip {
   color: #9ba6b7;
-  font-size: 1rem;
-  letter-spacing: -2px;
 }
 
-.palette-note {
-  display: grid;
-  gap: 3px;
-  margin-top: 18px;
-  padding: 12px;
-  border: 1px solid #dce4f5;
-  border-radius: 10px;
-  color: #526078;
-  background: #f5f8ff;
-  font-size: 0.76rem;
-  line-height: 1.4;
-}
-
-.palette-note strong {
-  color: var(--primary-dark);
+.drag-grip svg {
+  width: 12px;
+  height: 20px;
+  fill: currentColor;
+  stroke: none;
 }
 
 .stage {
@@ -378,31 +370,18 @@ svg {
 }
 
 .stage-header {
-  display: flex;
-  align-items: end;
-  justify-content: space-between;
-  gap: 18px;
+  display: block;
   padding: 14px 20px;
   border-bottom: 1px solid var(--line);
   background: var(--panel);
 }
 
 .title-field {
-  min-width: 260px;
-  flex: 1;
+  width: min(760px, 100%);
 }
 
 .title-field label,
-.example-field span {
-  display: block;
-  margin-bottom: 5px;
-  color: var(--muted);
-  font-size: 0.72rem;
-  font-weight: 750;
-}
-
-.title-field input,
-.example-field select {
+.title-field input {
   width: 100%;
   height: 40px;
   border: 1px solid var(--line);
@@ -417,54 +396,8 @@ svg {
 }
 
 .title-field input:hover,
-.title-field input:focus,
-.example-field select:hover,
-.example-field select:focus {
+.title-field input:focus {
   border-color: #9db0e8;
-}
-
-.stage-header-actions {
-  display: flex;
-  align-items: end;
-  gap: 9px;
-}
-
-.example-field {
-  width: 208px;
-}
-
-.example-field select {
-  padding: 0 32px 0 10px;
-}
-
-.secondary-button {
-  height: 40px;
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 0 14px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  color: #3f4b60;
-  background: var(--panel-soft);
-  font-size: 0.83rem;
-  font-weight: 750;
-}
-
-.secondary-button:hover {
-  color: var(--primary-dark);
-  border-color: #b8c6ed;
-  background: var(--primary-faint);
-}
-
-.secondary-button svg {
-  width: 18px;
-  height: 18px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.8;
-  stroke-linecap: round;
-  stroke-linejoin: round;
 }
 
 .selection-bar {
@@ -605,38 +538,30 @@ svg {
 }
 
 .paper {
-  width: min(960px, 100%);
+  width: min(1040px, 100%);
   min-height: 680px;
   margin: 0 auto;
-  padding: 30px 34px 50px;
+  padding: 34px 38px 50px;
   border: 1px solid #d9dee7;
   border-radius: 3px;
   background: var(--panel);
   box-shadow: var(--shadow);
 }
 
-.paper-meta {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 18px;
-  color: #7b8595;
-  font-size: 0.65rem;
-  font-weight: 800;
-  letter-spacing: 0.11em;
-}
-
 .diagram-wrap {
-  width: min(780px, 100%);
+  width: min(860px, 100%);
   margin: 0 auto;
+  padding: 16px;
+  border: 1px solid #a8a8a8;
+  background: #d6d6d6;
 }
 
 .ns-root {
   width: 100%;
-  border: 2px solid var(--line-strong);
-  color: #121926;
+  border: 2px solid #111111;
+  color: #111111;
   background: #ffffff;
-  font-size: 0.95rem;
+  font-size: 1rem;
 }
 
 .ns-title {
@@ -644,9 +569,9 @@ svg {
   display: flex;
   align-items: center;
   padding: 11px 15px;
-  border-bottom: 2px solid var(--line-strong);
-  background: #f0f3f7;
-  font-size: 1.02rem;
+  border-bottom: 2px solid #111111;
+  background: #d8d8d8;
+  font-size: 1.08rem;
   font-weight: 800;
 }
 
@@ -666,7 +591,8 @@ svg {
 
 .ns-element.selected > .ns-simple,
 .ns-element.selected > .ns-loop,
-.ns-element.selected > .ns-decision {
+.ns-element.selected > .ns-decision,
+.ns-element.selected > .ns-switch {
   background-color: #f5f8ff;
 }
 
@@ -674,24 +600,16 @@ svg {
   min-height: 54px;
   display: flex;
   align-items: center;
-  gap: 10px;
   padding: 11px 14px;
-  border-bottom: 2px solid var(--line-strong);
+  border-bottom: 2px solid #111111;
   background: #ffffff;
 }
 
 .ns-list > .ns-element.is-last > .ns-simple,
 .ns-list > .ns-element.is-last > .ns-loop,
-.ns-list > .ns-element.is-last > .ns-decision {
+.ns-list > .ns-element.is-last > .ns-decision,
+.ns-list > .ns-element.is-last > .ns-switch {
   border-bottom: 0;
-}
-
-.ns-type-input .ns-simple {
-  background: #f7faff;
-}
-
-.ns-type-output .ns-simple {
-  background: #f6fbf8;
 }
 
 .ns-type-subroutine .ns-simple {
@@ -706,7 +624,7 @@ svg {
   top: 0;
   bottom: 0;
   width: 2px;
-  background: var(--line-strong);
+  background: #111111;
 }
 
 .ns-type-subroutine .ns-simple::before {
@@ -715,25 +633,6 @@ svg {
 
 .ns-type-subroutine .ns-simple::after {
   right: 9px;
-}
-
-.ns-block-icon {
-  width: 25px;
-  height: 25px;
-  display: grid;
-  flex: 0 0 auto;
-  place-items: center;
-  color: var(--primary-dark);
-}
-
-.ns-block-icon svg {
-  width: 21px;
-  height: 21px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.7;
-  stroke-linecap: round;
-  stroke-linejoin: round;
 }
 
 .ns-text {
@@ -759,8 +658,20 @@ svg {
   resize: vertical;
 }
 
+.branch-label-editor {
+  width: calc(100% - 12px);
+  height: 32px;
+  margin: 5px 6px;
+  padding: 4px 7px;
+  border: 2px solid var(--primary);
+  border-radius: 3px;
+  color: var(--ink);
+  background: #ffffff;
+  text-align: center;
+}
+
 .ns-loop {
-  border-bottom: 2px solid var(--line-strong);
+  border-bottom: 2px solid #111111;
   background: #ffffff;
 }
 
@@ -770,8 +681,8 @@ svg {
   align-items: center;
   gap: 9px;
   padding: 10px 14px;
-  border-bottom: 2px solid var(--line-strong);
-  background: #eef2f6;
+  border-bottom: 2px solid #111111;
+  background: #ffffff;
   font-weight: 750;
 }
 
@@ -782,8 +693,8 @@ svg {
 }
 
 .ns-loop-rail {
-  border-right: 2px solid var(--line-strong);
-  background: #f4f6f8;
+  border-right: 2px solid #111111;
+  background: #d8d8d8;
 }
 
 .ns-loop-content {
@@ -792,18 +703,20 @@ svg {
 
 .ns-loop-content > .ns-list > .ns-element > .ns-simple,
 .ns-loop-content > .ns-list > .ns-element > .ns-loop,
-.ns-loop-content > .ns-list > .ns-element > .ns-decision {
-  border-bottom: 2px solid var(--line-strong);
+.ns-loop-content > .ns-list > .ns-element > .ns-decision,
+.ns-loop-content > .ns-list > .ns-element > .ns-switch {
+  border-bottom: 2px solid #111111;
 }
 
 .ns-loop-content > .ns-list > .ns-element.is-last > .ns-simple,
 .ns-loop-content > .ns-list > .ns-element.is-last > .ns-loop,
-.ns-loop-content > .ns-list > .ns-element.is-last > .ns-decision {
+.ns-loop-content > .ns-list > .ns-element.is-last > .ns-decision,
+.ns-loop-content > .ns-list > .ns-element.is-last > .ns-switch {
   border-bottom: 0;
 }
 
 .ns-decision {
-  border-bottom: 2px solid var(--line-strong);
+  border-bottom: 2px solid #111111;
   background: #ffffff;
 }
 
@@ -815,8 +728,8 @@ svg {
   justify-content: center;
   padding: 13px 58px 25px;
   overflow: hidden;
-  border-bottom: 2px solid var(--line-strong);
-  background: #eef2f6;
+  border-bottom: 2px solid #111111;
+  background: #ffffff;
   text-align: center;
   font-weight: 750;
 }
@@ -828,7 +741,7 @@ svg {
   bottom: 15px;
   width: 53%;
   height: 2px;
-  background: var(--line-strong);
+  background: #111111;
 }
 
 .ns-decision-head::before {
@@ -871,14 +784,14 @@ svg {
 }
 
 .ns-branch:first-child {
-  border-right: 2px solid var(--line-strong);
+  border-right: 2px solid #111111;
 }
 
 .branch-title {
   padding: 5px 8px;
   border-bottom: 1px solid #aeb7c4;
   color: #5f6b7c;
-  background: #fafbfc;
+  background: #ffffff;
   font-size: 0.66rem;
   font-weight: 800;
   letter-spacing: 0.07em;
@@ -888,13 +801,15 @@ svg {
 
 .ns-branch > .ns-list > .ns-element > .ns-simple,
 .ns-branch > .ns-list > .ns-element > .ns-loop,
-.ns-branch > .ns-list > .ns-element > .ns-decision {
-  border-bottom: 2px solid var(--line-strong);
+.ns-branch > .ns-list > .ns-element > .ns-decision,
+.ns-branch > .ns-list > .ns-element > .ns-switch {
+  border-bottom: 2px solid #111111;
 }
 
 .ns-branch > .ns-list > .ns-element.is-last > .ns-simple,
 .ns-branch > .ns-list > .ns-element.is-last > .ns-loop,
-.ns-branch > .ns-list > .ns-element.is-last > .ns-decision {
+.ns-branch > .ns-list > .ns-element.is-last > .ns-decision,
+.ns-branch > .ns-list > .ns-element.is-last > .ns-switch {
   border-bottom: 0;
 }
 
@@ -903,18 +818,68 @@ svg {
   display: grid;
   place-items: center;
   padding: 12px;
-  color: #8791a1;
-  background:
-    repeating-linear-gradient(
-      -45deg,
-      #fbfcfd,
-      #fbfcfd 8px,
-      #f6f8fa 8px,
-      #f6f8fa 16px
-    );
+  color: #777777;
+  background: #ffffff;
   font-size: 0.76rem;
   font-style: italic;
   text-align: center;
+}
+
+.ns-switch {
+  border-bottom: 2px solid #111111;
+  background: #ffffff;
+}
+
+.ns-switch-head {
+  min-height: 54px;
+  display: flex;
+  align-items: center;
+  padding: 11px 14px;
+  border-bottom: 2px solid #111111;
+  background: #ffffff;
+  font-weight: 750;
+}
+
+.ns-switch-branches {
+  display: grid;
+  grid-template-columns: repeat(var(--branch-count), minmax(118px, 1fr));
+  min-height: 90px;
+  overflow-x: auto;
+}
+
+.ns-switch-branch {
+  min-width: 0;
+  background: #ffffff;
+}
+
+.ns-switch-branch + .ns-switch-branch {
+  border-left: 2px solid #111111;
+}
+
+.ns-switch-label {
+  min-height: 36px;
+  display: grid;
+  place-items: center;
+  padding: 6px 8px;
+  border-bottom: 2px solid #111111;
+  background: #f2f2f2;
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.ns-switch-branch > .ns-list > .ns-element > .ns-simple,
+.ns-switch-branch > .ns-list > .ns-element > .ns-loop,
+.ns-switch-branch > .ns-list > .ns-element > .ns-decision,
+.ns-switch-branch > .ns-list > .ns-element > .ns-switch {
+  border-bottom: 2px solid #111111;
+}
+
+.ns-switch-branch > .ns-list > .ns-element.is-last > .ns-simple,
+.ns-switch-branch > .ns-list > .ns-element.is-last > .ns-loop,
+.ns-switch-branch > .ns-list > .ns-element.is-last > .ns-decision,
+.ns-switch-branch > .ns-list > .ns-element.is-last > .ns-switch {
+  border-bottom: 0;
 }
 
 .drop-zone {
@@ -1059,6 +1024,43 @@ body.placement-active .drop-zone:hover span,
 .help-content a {
   color: var(--primary);
   font-weight: 700;
+}
+
+.operator-help-list {
+  display: grid;
+  gap: 8px;
+}
+
+.operator-help-item {
+  display: grid;
+  gap: 2px;
+  padding: 10px 11px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel-soft);
+}
+
+.operator-help-item strong {
+  color: var(--ink);
+  font-size: 0.82rem;
+}
+
+.operator-help-item span {
+  color: var(--muted);
+  font-size: 0.76rem;
+  line-height: 1.4;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
 }
 
 kbd {
@@ -1218,15 +1220,6 @@ kbd {
     display: none;
   }
 
-  .stage-header {
-    align-items: stretch;
-    flex-direction: column;
-  }
-
-  .stage-header-actions {
-    justify-content: space-between;
-  }
-
   .selection-bar {
     align-items: flex-start;
     flex-direction: column;
@@ -1248,12 +1241,15 @@ kbd {
 
   .toolbar {
     width: 100%;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 2px;
+    overflow: visible;
   }
 
   .tool-button {
-    flex: 1;
     min-width: 0;
+    padding-inline: 2px;
   }
 
   .workspace {
@@ -1267,8 +1263,7 @@ kbd {
     border-bottom: 1px solid var(--line);
   }
 
-  .palette-intro,
-  .palette-note {
+  .palette-intro {
     display: none;
   }
 
@@ -1292,23 +1287,9 @@ kbd {
     padding-inline: 14px;
   }
 
-  .example-field {
-    width: auto;
-    flex: 1;
-  }
-
   .selection-bar,
   .guidance-bar {
     padding-inline: 14px;
-  }
-
-  .selection-actions button {
-    font-size: 0;
-  }
-
-  .selection-actions svg {
-    width: 18px;
-    height: 18px;
   }
 
   .stage-scroll {
@@ -1322,19 +1303,6 @@ kbd {
 
   .ns-root {
     font-size: 0.84rem;
-  }
-
-  .ns-branches {
-    grid-template-columns: 1fr;
-  }
-
-  .ns-branch:first-child {
-    border-right: 0;
-    border-bottom: 2px solid var(--line-strong);
-  }
-
-  .branch-title {
-    display: block;
   }
 
   .export-options {
@@ -1362,20 +1330,12 @@ kbd {
   }
 
   .tool-button span {
-    font-size: 0.66rem;
+    font-size: 0.54rem;
+    white-space: nowrap;
   }
 
   .block-list {
     grid-template-columns: 1fr;
-  }
-
-  .stage-header-actions {
-    align-items: stretch;
-    flex-direction: column;
-  }
-
-  .secondary-button {
-    justify-content: center;
   }
 
   .ns-decision-head {
@@ -1398,7 +1358,6 @@ kbd {
   .stage-header,
   .selection-bar,
   .guidance-bar,
-  .paper-meta,
   .drop-zone,
   .toast {
     display: none !important;
@@ -1407,7 +1366,8 @@ kbd {
   .workspace,
   .stage,
   .stage-scroll,
-  .paper {
+  .paper,
+  .diagram-wrap {
     display: block;
     width: 100%;
     min-height: 0;
@@ -1438,14 +1398,14 @@ kbd {
   .ns-decision,
   .ns-decision-head,
   .ns-branch,
-  .branch-title {
+  .branch-title,
+  .ns-switch,
+  .ns-switch-head,
+  .ns-switch-branch,
+  .ns-switch-label {
     color: #000000 !important;
     border-color: #000000 !important;
     background: #ffffff !important;
-  }
-
-  .ns-block-icon {
-    display: none;
   }
 
   .ns-element.selected {
