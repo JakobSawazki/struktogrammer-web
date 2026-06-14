@@ -6,6 +6,15 @@
   <meta name="description" content="Struktogrammer Web - Nassi-Shneiderman-Struktogramme einfach im Browser erstellen.">
   <meta name="theme-color" content="#f4f7fb">
   <title>Struktogrammer Web</title>
+  <script>
+    try {
+      const savedTheme = localStorage.getItem('struktogrammer-web-theme-v1');
+      const preferredTheme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.dataset.theme = savedTheme || preferredTheme;
+    } catch {
+      document.documentElement.dataset.theme = 'light';
+    }
+  </script>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -44,6 +53,10 @@
       <path d="M12 2.75 20 6v5.45c0 4.7-3.2 8.25-8 9.8-4.8-1.55-8-5.1-8-9.8V6z"></path>
       <path d="m8.25 11.9 2.45 2.45 5.25-5.3"></path>
     </symbol>
+    <symbol id="icon-theme" viewBox="0 0 24 24">
+      <path d="M12 3.25a8.75 8.75 0 1 0 0 17.5z"></path>
+      <path d="M12 3.25a8.75 8.75 0 0 1 0 17.5M12 7h4M12 12h5.5M12 17h4"></path>
+    </symbol>
     <symbol id="icon-help" viewBox="0 0 24 24">
       <circle cx="12" cy="12" r="8.5"></circle>
       <path d="M9.7 9.2a2.5 2.5 0 1 1 3.1 2.4c-.8.3-.8.9-.8 1.7M12 16.8h.01"></path>
@@ -71,15 +84,20 @@
 
   <div class="app-shell">
     <header class="topbar">
-      <a class="brand" href="#" id="brandLink" aria-label="Struktogrammer Web Start">
+      <button class="brand" id="brandLink" type="button" aria-haspopup="dialog" aria-label="Programminfo und Impressum öffnen">
         <span class="brand-mark" aria-hidden="true">
-          <span></span><span></span><span></span>
+          <img src="assets/brand/struktogrammer-mark.png" alt="">
         </span>
         <span class="brand-copy">
           <strong>Struktogrammer</strong>
           <small>Web</small>
         </span>
-      </a>
+        <span class="brand-popover" aria-hidden="true">
+          <strong>Struktogrammer Web</strong>
+          <span>Ein klarer Editor für Nassi-Shneiderman-Struktogramme.</span>
+          <small>Klicken für Programminfo und Impressum</small>
+        </span>
+      </button>
 
       <nav class="toolbar" aria-label="Projektaktionen">
         <button class="tool-button" id="newButton" type="button">
@@ -109,6 +127,10 @@
         <button class="tool-button" id="validateButton" type="button">
           <svg><use href="#icon-check"></use></svg>
           <span>Prüfen</span>
+        </button>
+        <button class="tool-button" id="themeButton" type="button" aria-pressed="false" title="Hell- oder Dunkelmodus wechseln">
+          <svg><use href="#icon-theme"></use></svg>
+          <span>Modus</span>
         </button>
       </nav>
     </header>
@@ -189,6 +211,7 @@
       <section>
         <h3>Bearbeiten</h3>
         <p>Klicke einen Baustein an, um Aktionen einzublenden. Ein Doppelklick auf den Text startet die direkte Bearbeitung. Enter übernimmt, Escape bricht ab.</p>
+        <p>Vorlagen wie <strong>*Variable*</strong> erscheinen im fertigen Struktogramm fett. Beim Bearbeiten bleiben die Sternchen als Formatierungshilfe sichtbar.</p>
       </section>
       <section>
         <h3>Fachliche Schreibweise</h3>
@@ -205,6 +228,29 @@
         <p><kbd>Enter</kbd> Bearbeitung übernehmen</p>
         <p><kbd>Esc</kbd> Bearbeitung oder Auswahl abbrechen</p>
       </section>
+    </div>
+  </dialog>
+
+  <dialog class="modal compact-modal" id="imprintDialog">
+    <div class="modal-header">
+      <div>
+        <span class="eyebrow">Programminfo</span>
+        <h2>Struktogrammer Web</h2>
+      </div>
+      <button class="icon-button" type="button" data-close-dialog="imprintDialog" aria-label="Programminfo schließen">
+        <svg><use href="#icon-close"></use></svg>
+      </button>
+    </div>
+    <div class="modal-body imprint-content">
+      <div class="imprint-brand">
+        <img src="assets/brand/struktogrammer-mark.png" alt="">
+        <div>
+          <strong>Struktogrammer Web</strong>
+          <span>Editor für Nassi-Shneiderman-Struktogramme</span>
+        </div>
+      </div>
+      <p>Designed und entwickelt von <strong>Sawazki Electronics</strong>.</p>
+      <p>Die Anwendung wurde für eine klare, zuverlässige und didaktisch verständliche Arbeit im Informatikunterricht gestaltet.</p>
     </div>
   </dialog>
 

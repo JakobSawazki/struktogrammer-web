@@ -18,6 +18,8 @@ Python-Einstieg und Abiturvorbereitung reduziert.
 - Saubere Druckansicht
 - Leerer Start ohne vorgegebene Musterlösung
 - Direkter Verweis auf die offizielle Operatorenliste und eine einfache Grundprüfung
+- Fett hervorgehobene Platzhalter in fachlichen Vorlagen
+- Umschaltbarer, lokal gespeicherter Hell- und Dunkelmodus
 
 ## Start
 

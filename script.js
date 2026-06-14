@@ -3,6 +3,7 @@
 // App state and element templates
 
 const STORAGE_KEY = 'struktogrammer-web-project-v2';
+const THEME_KEY = 'struktogrammer-web-theme-v1';
 const PROJECT_FORMAT = 'struktogrammer-web';
 const LOOP_TYPES = new Set(['while', 'for']);
 const ALLOWED_TYPES = new Set([
@@ -23,7 +24,7 @@ const ELEMENT_TYPES = {
     label: 'Anweisung / Zuweisung',
     shortLabel: 'Anweisung',
     summary: 'Wert berechnen oder zuweisen',
-    defaultText: 'Zuweisung: variable = wert',
+    defaultText: 'Zuweisung: *Variable* = *Wert*',
     help: 'Eine Sequenz ist eine einfache Anweisung, die der Reihe nach ausgeführt wird.',
     icon: 'sequence'
   },
@@ -31,7 +32,7 @@ const ELEMENT_TYPES = {
     label: 'Deklaration + Initialisierung',
     shortLabel: 'Deklaration',
     summary: 'Variable anlegen und Startwert setzen',
-    defaultText: 'Deklaration und Initialisierung: variable als Datentyp = wert',
+    defaultText: 'Deklaration und Initialisierung: *Variable* als *Datentyp* = *Wert*',
     help: 'Eine Variable wird mit Datentyp deklariert und erhält direkt einen Anfangswert.',
     icon: 'declarationInitialization'
   },
@@ -39,7 +40,7 @@ const ELEMENT_TYPES = {
     label: 'Deklaration + Einlesen',
     shortLabel: 'Deklaration und Einlesen',
     summary: 'Variable anlegen und Wert einlesen',
-    defaultText: 'Deklaration und Einlesen: variable als Datentyp',
+    defaultText: 'Deklaration und Einlesen: *Variable* als *Datentyp*',
     help: 'Eine Variable wird deklariert und ihr Wert anschließend eingelesen.',
     icon: 'declarationInput'
   },
@@ -47,7 +48,7 @@ const ELEMENT_TYPES = {
     label: 'Einlesen',
     shortLabel: 'Einlesen',
     summary: 'Wert in vorhandene Variable einlesen',
-    defaultText: 'Einlesen: variable',
+    defaultText: 'Einlesen: *Variable*',
     help: 'Eine Eingabe liest einen Wert ein, zum Beispiel über input() im Python-Unterricht.',
     icon: 'input'
   },
@@ -55,7 +56,7 @@ const ELEMENT_TYPES = {
     label: 'Ausgabe',
     shortLabel: 'Ausgabe',
     summary: 'Text oder Werte ausgeben',
-    defaultText: 'Ausgabe: inhalt',
+    defaultText: 'Ausgabe: *Inhalt*',
     help: 'Eine Ausgabe entspricht im Python-Unterricht häufig einem print()-Befehl.',
     icon: 'output'
   },
@@ -63,7 +64,7 @@ const ELEMENT_TYPES = {
     label: 'Verzweigung / IF-ELSE',
     shortLabel: 'Verzweigung',
     summary: 'Bedingung mit Dann- und Sonst-Zweig',
-    defaultText: 'Wenn bedingung',
+    defaultText: 'Wenn *Bedingung*',
     help: 'Eine Entscheidung führt abhängig von einer Bedingung den Dann- oder den Sonst-Zweig aus.',
     icon: 'decision'
   },
@@ -71,7 +72,7 @@ const ELEMENT_TYPES = {
     label: 'Mehrfachverzweigung',
     shortLabel: 'Mehrfachverzweigung',
     summary: 'Mehrere Fälle einer Auswahl darstellen',
-    defaultText: 'Fallunterscheidung nach ausdruck',
+    defaultText: 'Fallunterscheidung nach *Ausdruck*',
     help: 'Eine Mehrfachverzweigung wählt abhängig von einem Ausdruck genau einen von mehreren Fällen aus.',
     icon: 'switch'
   },
@@ -79,7 +80,7 @@ const ELEMENT_TYPES = {
     label: 'Wiederholung solange',
     shortLabel: 'While-Schleife',
     summary: 'Kopfgesteuerte Schleife',
-    defaultText: 'Wiederhole solange bedingung',
+    defaultText: 'Wiederhole solange *Bedingung*',
     help: 'Diese Schleife prüft zuerst die Bedingung. Nur wenn sie wahr ist, wird der Schleifenkörper ausgeführt.',
     icon: 'while'
   },
@@ -87,7 +88,7 @@ const ELEMENT_TYPES = {
     label: 'Zählschleife / FOR',
     shortLabel: 'Zählschleife',
     summary: 'Wiederholung mit Zählvariable',
-    defaultText: 'Zähle i von startwert bis endwert, Schrittweite schrittweite',
+    defaultText: 'Zähle *i* von *Startwert* bis *Endwert*, Schrittweite *Schrittweite*',
     help: 'Diese Schleife eignet sich, wenn die Anzahl der Wiederholungen über eine Zählvariable gesteuert wird.',
     icon: 'for'
   },
@@ -95,7 +96,7 @@ const ELEMENT_TYPES = {
     label: 'Subroutine / Funktion',
     shortLabel: 'Subroutine',
     summary: 'Funktion aufrufen oder Wert zurückgeben',
-    defaultText: 'Aufruf: funktion()',
+    defaultText: 'Aufruf: *Funktion*()',
     help: 'Eine Subroutine ist ein Unterprogramm. In Python entspricht dies häufig einem Funktionsaufruf.',
     icon: 'subroutine'
   }
@@ -135,6 +136,7 @@ window.addEventListener('DOMContentLoaded', init);
 
 function init() {
   cacheDom();
+  applyTheme(document.documentElement.dataset.theme || 'light', false);
   buildPalette();
   buildOperatorHelp();
   bindEvents();
@@ -154,13 +156,15 @@ function cacheDom() {
     cancelPlacementButton: document.getElementById('cancelPlacementButton'),
     fileInput: document.getElementById('fileInput'),
     helpDialog: document.getElementById('helpDialog'),
+    imprintDialog: document.getElementById('imprintDialog'),
     exportDialog: document.getElementById('exportDialog'),
     validationDialog: document.getElementById('validationDialog'),
     validationResults: document.getElementById('validationResults'),
     operatorHelpList: document.getElementById('operatorHelpList'),
     toast: document.getElementById('toast'),
     printDate: document.getElementById('printDate'),
-    stageScroll: document.getElementById('stageScroll')
+    stageScroll: document.getElementById('stageScroll'),
+    themeButton: document.getElementById('themeButton')
   });
 }
 
@@ -172,12 +176,10 @@ function bindEvents() {
   document.getElementById('printButton').addEventListener('click', printDiagram);
   document.getElementById('helpButton').addEventListener('click', () => dom.helpDialog.showModal());
   document.getElementById('validateButton').addEventListener('click', showValidation);
+  dom.themeButton.addEventListener('click', toggleTheme);
   document.getElementById('exportSvgButton').addEventListener('click', exportDiagramAsSvg);
   document.getElementById('exportPngButton').addEventListener('click', exportDiagramAsPng);
-  document.getElementById('brandLink').addEventListener('click', event => {
-    event.preventDefault();
-    dom.stageScroll.scrollTo({ top: 0, behavior: 'smooth' });
-  });
+  document.getElementById('brandLink').addEventListener('click', () => dom.imprintDialog.showModal());
 
   dom.diagramTitle.addEventListener('change', updateDiagramTitle);
   dom.fileInput.addEventListener('change', importDiagramFromJson);
@@ -205,6 +207,32 @@ function bindEvents() {
     event.preventDefault();
     event.returnValue = '';
   });
+}
+
+function toggleTheme() {
+  const nextTheme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+  applyTheme(nextTheme, true);
+}
+
+function applyTheme(theme, persist) {
+  const selectedTheme = theme === 'dark' ? 'dark' : 'light';
+  document.documentElement.dataset.theme = selectedTheme;
+  dom.themeButton?.setAttribute('aria-pressed', String(selectedTheme === 'dark'));
+  if (dom.themeButton) {
+    dom.themeButton.title = selectedTheme === 'dark'
+      ? 'Zum Hellmodus wechseln'
+      : 'Zum Dunkelmodus wechseln';
+  }
+
+  const themeColor = document.querySelector('meta[name="theme-color"]');
+  themeColor?.setAttribute('content', selectedTheme === 'dark' ? '#111827' : '#f4f7fb');
+
+  if (!persist) return;
+  try {
+    localStorage.setItem(THEME_KEY, selectedTheme);
+  } catch (error) {
+    console.warn('Das Farbschema konnte nicht gespeichert werden.', error);
+  }
 }
 
 // Palette
@@ -405,13 +433,19 @@ function renderDecision(element) {
 
   const header = document.createElement('div');
   header.className = 'ns-decision-head';
+  const lines = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  lines.classList.add('decision-lines');
+  lines.setAttribute('viewBox', '0 0 100 100');
+  lines.setAttribute('preserveAspectRatio', 'none');
+  lines.setAttribute('aria-hidden', 'true');
+  lines.innerHTML = '<line x1="0" y1="0" x2="50" y2="100"></line><line x1="100" y1="0" x2="50" y2="100"></line>';
   const thenMarker = document.createElement('span');
   thenMarker.className = 'branch-marker then';
   thenMarker.textContent = 'J';
   const elseMarker = document.createElement('span');
   elseMarker.className = 'branch-marker else';
   elseMarker.textContent = 'N';
-  header.append(thenMarker, createEditableText(element), elseMarker);
+  header.append(lines, thenMarker, createEditableText(element), elseMarker);
 
   const branches = document.createElement('div');
   branches.className = 'ns-branches';
@@ -486,7 +520,7 @@ function createEditableText(element) {
 
   const text = document.createElement('span');
   text.className = 'ns-text';
-  text.textContent = element.text;
+  appendFormattedText(text, element.text);
   text.tabIndex = 0;
   text.setAttribute('role', 'button');
   text.title = 'Doppelklick zum Bearbeiten';
@@ -501,6 +535,19 @@ function createEditableText(element) {
     }
   });
   return text;
+}
+
+function appendFormattedText(container, value) {
+  splitFormattedText(value).forEach(segment => {
+    if (!segment.bold) {
+      container.append(document.createTextNode(segment.text));
+      return;
+    }
+
+    const strong = document.createElement('strong');
+    strong.textContent = segment.text;
+    container.append(strong);
+  });
 }
 
 function createEditableBranchLabel(element, branch) {
@@ -1348,8 +1395,8 @@ function layoutSvgDecision(element, x, y, width) {
       <rect x="${x}" y="${y}" width="${width}" height="${totalHeight}" fill="#ffffff" stroke="#182230" stroke-width="2"/>
       <rect x="${x}" y="${y}" width="${width}" height="${headerHeight}" fill="#e1e1e1"/>
       <line x1="${x}" y1="${y + headerHeight}" x2="${x + width}" y2="${y + headerHeight}" stroke="#182230" stroke-width="2"/>
-      <line x1="${x}" y1="${y + headerHeight - 30}" x2="${centerX}" y2="${y + headerHeight}" stroke="#182230" stroke-width="2"/>
-      <line x1="${x + width}" y1="${y + headerHeight - 30}" x2="${centerX}" y2="${y + headerHeight}" stroke="#182230" stroke-width="2"/>
+      <line x1="${x}" y1="${y}" x2="${centerX}" y2="${y + headerHeight}" stroke="#182230" stroke-width="2"/>
+      <line x1="${x + width}" y1="${y}" x2="${centerX}" y2="${y + headerHeight}" stroke="#182230" stroke-width="2"/>
       <text x="${x + 12}" y="${y + headerHeight - 8}" font-family="Arial, Segoe UI, sans-serif" font-size="12" font-weight="700" fill="#344054">J</text>
       <text x="${x + width - 12}" y="${y + headerHeight - 8}" text-anchor="end" font-family="Arial, Segoe UI, sans-serif" font-size="12" font-weight="700" fill="#344054">N</text>
       <rect x="${x}" y="${y + headerHeight}" width="${width}" height="${captionHeight}" fill="#fafbfc"/>
@@ -1412,9 +1459,13 @@ function renderSvgText(lines, x, y, options = {}) {
   const size = options.size || 16;
   const lineHeight = options.lineHeight || 21;
   const weight = options.weight || 400;
-  const spans = lines.map((line, index) =>
-    `<tspan x="${x}" dy="${index === 0 ? 0 : lineHeight}">${escapeXml(line)}</tspan>`
-  ).join('');
+  const spans = lines.map((line, index) => {
+    const segments = splitFormattedText(line).map(segment => {
+      const segmentWeight = segment.bold ? ' font-weight="800"' : '';
+      return `<tspan${segmentWeight}>${escapeXml(segment.text)}</tspan>`;
+    }).join('');
+    return `<tspan x="${x}" dy="${index === 0 ? 0 : lineHeight}">${segments}</tspan>`;
+  }).join('');
   return `<text x="${x}" y="${y}" text-anchor="${anchor}" font-family="Arial, Segoe UI, sans-serif" font-size="${size}" font-weight="${weight}" fill="#121926">${spans}</text>`;
 }
 
@@ -1431,7 +1482,8 @@ function wrapSvgText(value, maxCharacters) {
 
     let line = '';
     words.forEach(word => {
-      if (word.length > maxCharacters) {
+      const formattedWord = /\*[^*\n]+\*/.test(word);
+      if (stripFormatting(word).length > maxCharacters && !formattedWord) {
         if (line) {
           result.push(line);
           line = '';
@@ -1443,7 +1495,7 @@ function wrapSvgText(value, maxCharacters) {
       }
 
       const candidate = line ? `${line} ${word}` : word;
-      if (candidate.length > maxCharacters && line) {
+      if (stripFormatting(candidate).length > maxCharacters && line) {
         result.push(line);
         line = word;
       } else {
@@ -1454,6 +1506,32 @@ function wrapSvgText(value, maxCharacters) {
   });
 
   return result.length ? result : [''];
+}
+
+function splitFormattedText(value) {
+  const text = String(value);
+  const segments = [];
+  const pattern = /\*([^*\n]+)\*/g;
+  let cursor = 0;
+  let match;
+
+  while ((match = pattern.exec(text)) !== null) {
+    if (match.index > cursor) {
+      segments.push({ text: text.slice(cursor, match.index), bold: false });
+    }
+    segments.push({ text: match[1], bold: true });
+    cursor = pattern.lastIndex;
+  }
+
+  if (cursor < text.length) {
+    segments.push({ text: text.slice(cursor), bold: false });
+  }
+
+  return segments.length ? segments : [{ text: '', bold: false }];
+}
+
+function stripFormatting(value) {
+  return splitFormattedText(value).map(segment => segment.text).join('');
 }
 
 function escapeXml(value) {
@@ -1594,7 +1672,7 @@ function showToast(message) {
 }
 
 function shorten(value, maxLength) {
-  const text = String(value).replace(/\s+/g, ' ').trim();
+  const text = stripFormatting(value).replace(/\s+/g, ' ').trim();
   return text.length > maxLength ? `${text.slice(0, maxLength - 1)}…` : text;
 }
 
