@@ -19,6 +19,18 @@ const ALLOWED_TYPES = new Set([
   'subroutine'
 ]);
 
+const PALETTE_TYPES = [
+  'sequence',
+  'declarationInitialization',
+  'declarationInput',
+  'output',
+  'if',
+  'switch',
+  'while',
+  'for',
+  'subroutine'
+];
+
 const ELEMENT_TYPES = {
   sequence: {
     label: 'Anweisung / Zuweisung',
@@ -125,6 +137,7 @@ const state = {
   editingBranchKey: null,
   pendingElementType: null,
   draggingElementType: null,
+  draggingElementId: null,
   dirty: false,
   savedSnapshot: ''
 };
@@ -176,13 +189,13 @@ function bindEvents() {
   document.getElementById('saveButton').addEventListener('click', exportDiagramAsJson);
   document.getElementById('imageButton').addEventListener('click', openExportDialog);
   document.getElementById('printButton').addEventListener('click', printDiagram);
-  document.getElementById('helpButton').addEventListener('click', () => dom.helpDialog.showModal());
+  document.getElementById('helpButton').addEventListener('click', () => openDialog(dom.helpDialog));
   document.getElementById('validateButton').addEventListener('click', showValidation);
-  document.getElementById('operatorListButton').addEventListener('click', () => dom.operatorDialog.showModal());
+  document.getElementById('operatorListButton').addEventListener('click', () => openDialog(dom.operatorDialog));
   dom.themeButton.addEventListener('click', toggleTheme);
   document.getElementById('exportSvgButton').addEventListener('click', exportDiagramAsSvg);
   document.getElementById('exportPngButton').addEventListener('click', exportDiagramAsPng);
-  document.getElementById('brandLink').addEventListener('click', () => dom.imprintDialog.showModal());
+  document.getElementById('brandLink').addEventListener('click', () => openDialog(dom.imprintDialog));
   dom.offlineDownloadButton.addEventListener('click', downloadOfflineStandalone);
 
   dom.diagramTitle.addEventListener('change', updateDiagramTitle);
@@ -224,8 +237,8 @@ function applyTheme(theme, persist) {
   dom.themeButton?.setAttribute('aria-pressed', String(selectedTheme === 'dark'));
   if (dom.themeButton) {
     dom.themeButton.dataset.tooltip = selectedTheme === 'dark'
-      ? 'Zum Hellmodus wechseln'
-      : 'Zum Dunkelmodus wechseln';
+      ? 'Zum Hellmodus wechseln · Alt+M'
+      : 'Zum Dunkelmodus wechseln · Alt+M';
   }
 
   const themeColor = document.querySelector('meta[name="theme-color"]');
@@ -242,7 +255,8 @@ function applyTheme(theme, persist) {
 // Palette
 
 function buildPalette() {
-  Object.entries(ELEMENT_TYPES).forEach(([type, definition]) => {
+  PALETTE_TYPES.forEach(type => {
+    const definition = ELEMENT_TYPES[type];
     const card = document.createElement('button');
     card.type = 'button';
     card.className = 'block-card';
@@ -276,7 +290,7 @@ function buildPalette() {
 }
 
 function buildOperatorHelp() {
-  Object.values(ELEMENT_TYPES).forEach(definition => {
+  PALETTE_TYPES.map(type => ELEMENT_TYPES[type]).forEach(definition => {
     const item = document.createElement('div');
     item.className = 'operator-help-item';
     const title = document.createElement('strong');
@@ -298,7 +312,8 @@ function selectPaletteType(type) {
 function clearPendingPlacement() {
   state.pendingElementType = null;
   state.draggingElementType = null;
-  document.body.classList.remove('placement-active', 'drag-active');
+  state.draggingElementId = null;
+  document.body.classList.remove('placement-active', 'drag-active', 'reorder-active');
   updatePaletteSelection();
   updateGuidance();
 }
@@ -313,6 +328,7 @@ function updatePaletteSelection() {
 
 function startPaletteDrag(event, type, card) {
   state.draggingElementType = type;
+  state.draggingElementId = null;
   card.classList.add('is-dragging');
   document.body.classList.add('drag-active');
   event.dataTransfer.effectAllowed = 'copy';
@@ -324,7 +340,41 @@ function finishPaletteDrag() {
   document.querySelectorAll('.block-card').forEach(card => card.classList.remove('is-dragging'));
   document.querySelectorAll('.drop-zone').forEach(zone => zone.classList.remove('drag-over'));
   state.draggingElementType = null;
-  document.body.classList.remove('drag-active');
+  if (!state.draggingElementId) {
+    document.body.classList.remove('drag-active');
+  }
+}
+
+function startElementDrag(event, elementId, node) {
+  if (event.target.closest('.inline-editor, .branch-label-editor')) {
+    event.preventDefault();
+    return;
+  }
+  event.stopPropagation();
+
+  state.draggingElementId = elementId;
+  state.draggingElementType = null;
+  state.pendingElementType = null;
+  state.selectedElementId = elementId;
+  state.editingElementId = null;
+  state.editingBranchKey = null;
+  node.classList.add('selected', 'is-moving');
+  document.body.classList.add('drag-active', 'reorder-active');
+  document.body.classList.remove('placement-active');
+  event.dataTransfer.effectAllowed = 'move';
+  event.dataTransfer.setData('application/x-struktogrammer-move', elementId);
+  event.dataTransfer.setData('text/plain', elementId);
+  updatePaletteSelection();
+  renderSelectionBar();
+  updateGuidance();
+}
+
+function finishElementDrag() {
+  document.querySelectorAll('.ns-element').forEach(element => element.classList.remove('is-moving'));
+  document.querySelectorAll('.drop-zone').forEach(zone => zone.classList.remove('drag-over'));
+  state.draggingElementId = null;
+  document.body.classList.remove('drag-active', 'reorder-active');
+  updateGuidance();
 }
 
 // Rendering
@@ -378,6 +428,7 @@ function renderElement(element, isLast) {
   const node = document.createElement('div');
   node.className = `ns-element ns-type-${element.type}`;
   node.dataset.elementId = element.id;
+  node.draggable = true;
   node.classList.toggle('selected', element.id === state.selectedElementId);
   node.classList.toggle('is-last', isLast);
 
@@ -386,6 +437,8 @@ function renderElement(element, isLast) {
     event.stopPropagation();
     selectElement(element.id);
   });
+  node.addEventListener('dragstart', event => startElementDrag(event, element.id, node));
+  node.addEventListener('dragend', finishElementDrag);
 
   if (element.type === 'if') {
     node.append(renderDecision(element));
@@ -603,7 +656,7 @@ function createDropZone(target) {
   });
   zone.addEventListener('dragover', event => {
     event.preventDefault();
-    event.dataTransfer.dropEffect = 'copy';
+    event.dataTransfer.dropEffect = state.draggingElementId ? 'move' : 'copy';
   });
   zone.addEventListener('dragleave', event => {
     if (!zone.contains(event.relatedTarget)) zone.classList.remove('drag-over');
@@ -612,6 +665,14 @@ function createDropZone(target) {
     event.preventDefault();
     event.stopPropagation();
     zone.classList.remove('drag-over');
+    const movingElementId = event.dataTransfer.getData('application/x-struktogrammer-move') ||
+      state.draggingElementId;
+    if (movingElementId) {
+      moveElementToTarget(movingElementId, target);
+      finishElementDrag();
+      return;
+    }
+
     const type = event.dataTransfer.getData('application/x-struktogrammer-element') ||
       event.dataTransfer.getData('text/plain') ||
       state.draggingElementType;
@@ -718,6 +779,65 @@ function insertElementAt(type, target) {
   state.editingElementId = null;
   state.editingBranchKey = null;
   markDiagramChanged(`${ELEMENT_TYPES[type].shortLabel} eingefügt.`);
+}
+
+function moveElementToTarget(elementId, target) {
+  const info = findElementById(state.diagram.elements, elementId);
+  if (!info) {
+    showToast('Dieser Baustein ist nicht mehr verfügbar.');
+    return;
+  }
+
+  if (!canMoveElementToTarget(info.element, target)) {
+    showToast('Ein Baustein kann nicht in sich selbst verschoben werden.');
+    return;
+  }
+
+  const targetList = resolveTargetList(target);
+  if (!targetList) {
+    showToast('Diese Zielstelle ist nicht mehr verfügbar.');
+    return;
+  }
+
+  let targetIndex = clamp(Number(target.index), 0, targetList.length);
+  if (info.list === targetList) {
+    if (info.index < targetIndex) targetIndex -= 1;
+    if (info.index === targetIndex) return;
+  }
+
+  const [element] = info.list.splice(info.index, 1);
+  targetList.splice(targetIndex, 0, element);
+  state.selectedElementId = element.id;
+  state.editingElementId = null;
+  state.editingBranchKey = null;
+  markDiagramChanged('Baustein verschoben.');
+}
+
+function canMoveElementToTarget(element, target) {
+  if (!target || target.kind === 'root') return true;
+  return !elementContainsId(element, target.ownerId);
+}
+
+function elementContainsId(element, id) {
+  if (!element || !id) return false;
+  if (element.id === id) return true;
+
+  if (element.type === 'if') {
+    return element.thenBranch.some(child => elementContainsId(child, id)) ||
+      element.elseBranch.some(child => elementContainsId(child, id));
+  }
+
+  if (LOOP_TYPES.has(element.type)) {
+    return element.children.some(child => elementContainsId(child, id));
+  }
+
+  if (element.type === 'switch') {
+    return element.branches.some(branch =>
+      branch.children.some(child => elementContainsId(child, id))
+    );
+  }
+
+  return false;
 }
 
 function selectElement(id) {
@@ -993,7 +1113,8 @@ function setDiagram(diagram, dirty, saveToLocalStorage = true) {
   state.editingBranchKey = null;
   state.pendingElementType = null;
   state.draggingElementType = null;
-  document.body.classList.remove('placement-active', 'drag-active');
+  state.draggingElementId = null;
+  document.body.classList.remove('placement-active', 'drag-active', 'reorder-active');
   state.savedSnapshot = dirty ? '' : JSON.stringify(diagram);
   state.dirty = dirty;
   if (saveToLocalStorage) autoSave();
@@ -1130,7 +1251,7 @@ function showValidation() {
     dom.validationResults.append(item);
   });
 
-  dom.validationDialog.showModal();
+  openDialog(dom.validationDialog);
 }
 
 function validateDiagram(diagram) {
@@ -1198,7 +1319,7 @@ function containsComparisonOperator(text) {
 function openExportDialog() {
   state.editingElementId = null;
   renderDiagram();
-  dom.exportDialog.showModal();
+  openDialog(dom.exportDialog);
 }
 
 function exportDiagramAsSvg() {
@@ -1574,9 +1695,32 @@ function printDiagram() {
 
 // Helpers
 
+function openDialog(dialog) {
+  if (!dialog.open) dialog.showModal();
+}
+
 function handleGlobalKeydown(event) {
   const activeTag = document.activeElement?.tagName;
   const isTyping = activeTag === 'INPUT' || activeTag === 'TEXTAREA' || activeTag === 'SELECT';
+
+  if (event.altKey && !event.ctrlKey && !event.metaKey) {
+    const shortcutActions = {
+      n: createNewProject,
+      o: () => dom.fileInput.click(),
+      s: exportDiagramAsJson,
+      b: openExportDialog,
+      p: printDiagram,
+      k: showValidation,
+      h: () => openDialog(dom.helpDialog),
+      m: toggleTheme
+    };
+    const action = shortcutActions[event.key.toLowerCase()];
+    if (action) {
+      event.preventDefault();
+      action();
+      return;
+    }
+  }
 
   if (event.key === 'Escape') {
     if (state.editingBranchKey) {
@@ -1718,16 +1862,16 @@ function clamp(value, min, max) {
 
 function getElementIcon(name) {
   const icons = {
-    sequence: '<svg viewBox="0 0 28 28" aria-hidden="true"><rect x="3.5" y="5" width="21" height="18" rx="1.5"/><path d="M7.5 10h8.5M7.5 14h5.5M7.5 18h9.5M18 12l3 2-3 2"/></svg>',
-    declarationInitialization: '<svg viewBox="0 0 28 28" aria-hidden="true"><rect x="3.5" y="4.5" width="21" height="19" rx="1.5"/><path d="M8 9h5M8 14h4M16 9v10M19 12h3M20.5 10.5v3M18.5 18h4"/><circle cx="10" cy="18" r="1.5"/></svg>',
-    declarationInput: '<svg viewBox="0 0 28 28" aria-hidden="true"><rect x="3.5" y="4.5" width="12" height="19" rx="1.5"/><path d="M7 9h5M7 13h4M7 17h5M17 14h7M21 10.5l3.5 3.5-3.5 3.5"/></svg>',
-    input: '<svg viewBox="0 0 28 28" aria-hidden="true"><path d="M3.5 14h15M14.5 9.5 19 14l-4.5 4.5M21.5 5h3v18h-3"/><path d="M6 9.5v9"/></svg>',
-    output: '<svg viewBox="0 0 28 28" aria-hidden="true"><path d="M24.5 14h-15M13.5 9.5 9 14l4.5 4.5M6.5 5h-3v18h3"/><path d="M22 9.5v9"/></svg>',
-    decision: '<svg viewBox="0 0 28 28" aria-hidden="true"><rect x="3.5" y="4.5" width="21" height="19" rx="1.5"/><path d="M3.5 15 14 9l10.5 6M14 9v14"/><path d="M7 19h4M17 19h4"/></svg>',
-    switch: '<svg viewBox="0 0 28 28" aria-hidden="true"><rect x="3.5" y="4.5" width="21" height="19" rx="1.5"/><path d="M3.5 11h21M10.5 11v12M17.5 11v12M7 8h14"/><path d="m7 15 1.5 1.5L10 15m4 0 1.5 1.5L17 15m4 0 1.5 1.5L24 15"/></svg>',
-    while: '<svg viewBox="0 0 28 28" aria-hidden="true"><rect x="3.5" y="4.5" width="21" height="19" rx="1.5"/><path d="M3.5 11h21M9 11v12M7 8h12"/><path d="M13 16h7M17.5 13.5 20 16l-2.5 2.5"/></svg>',
-    for: '<svg viewBox="0 0 28 28" aria-hidden="true"><rect x="3.5" y="4.5" width="21" height="19" rx="1.5"/><path d="M3.5 11h21M9 11v12M7 8h4M14 8h7"/><path d="M13 16h7M17.5 13.5 20 16l-2.5 2.5"/></svg>',
-    subroutine: '<svg viewBox="0 0 28 28" aria-hidden="true"><rect x="3.5" y="4.5" width="21" height="19" rx="1.5"/><path d="M8 4.5v19M20 4.5v19M11 10h6M11 14h4M11 18h6"/></svg>'
+    sequence: '<svg viewBox="0 0 28 28" aria-hidden="true"><rect x="4" y="5" width="20" height="18" rx="2"/><path d="M8 10h5.5M8 15h12M8 19h7M16 10h4"/><path d="M15.5 13.2 18.2 10.5 15.5 7.8"/></svg>',
+    declarationInitialization: '<svg viewBox="0 0 28 28" aria-hidden="true"><rect x="4" y="5" width="20" height="18" rx="2"/><path d="M8 10h5M8 14h8M8 18h5M18 9v10M20.5 11.5v5M18 14h5"/></svg>',
+    declarationInput: '<svg viewBox="0 0 28 28" aria-hidden="true"><rect x="4" y="5" width="12.5" height="18" rx="2"/><path d="M7.5 10h5M7.5 14h4M7.5 18h5M18.5 14h5.5M21.5 11.3 24.2 14l-2.7 2.7M19 20h5"/></svg>',
+    input: '<svg viewBox="0 0 28 28" aria-hidden="true"><rect x="19.5" y="5" width="4.5" height="18" rx="1.5"/><path d="M4 14h13M13.5 10.5 17 14l-3.5 3.5M6.5 9.5v9"/></svg>',
+    output: '<svg viewBox="0 0 28 28" aria-hidden="true"><rect x="4" y="6" width="13.5" height="16" rx="2"/><path d="M8 11h5M8 15h4M18.5 14H24M21.5 10.8 24.2 14l-2.7 3.2"/></svg>',
+    decision: '<svg viewBox="0 0 28 28" aria-hidden="true"><rect x="4" y="5" width="20" height="18" rx="2"/><path d="M4 14 14 8l10 6M14 8v15M8 18h4M17 18h3.5"/><text x="7.2" y="12.6" fill="currentColor" stroke="none" font-size="4" font-weight="800">J</text><text x="18.4" y="12.6" fill="currentColor" stroke="none" font-size="4" font-weight="800">N</text></svg>',
+    switch: '<svg viewBox="0 0 28 28" aria-hidden="true"><rect x="4" y="5" width="20" height="18" rx="2"/><path d="M4 11h20M10.7 11v12M17.3 11v12M7.5 8h13M7.5 16h1.8M14 16h1.8M20.5 16h1.8M7.5 19h1.8M14 19h1.8M20.5 19h1.8"/></svg>',
+    while: '<svg viewBox="0 0 28 28" aria-hidden="true"><rect x="4" y="5" width="20" height="18" rx="2"/><path d="M4 11h20M9 11v12M7.5 8h9M13 17.5h6.5M17.2 14.8l2.7 2.7-2.7 2.7"/></svg>',
+    for: '<svg viewBox="0 0 28 28" aria-hidden="true"><rect x="4" y="5" width="20" height="18" rx="2"/><path d="M4 11h20M9 11v12M7.5 8h4M16 8h4.5M13 17.5h6.5M17.2 14.8l2.7 2.7-2.7 2.7"/><text x="12.7" y="9.5" fill="currentColor" stroke="none" font-size="4" font-weight="800">i</text></svg>',
+    subroutine: '<svg viewBox="0 0 28 28" aria-hidden="true"><rect x="4" y="5" width="20" height="18" rx="2"/><path d="M8 5v18M20 5v18M11 10h6M11 18h6"/><text x="10.4" y="15.4" fill="currentColor" stroke="none" font-size="5" font-weight="800">f()</text></svg>'
   };
   return icons[name] || icons.sequence;
 }

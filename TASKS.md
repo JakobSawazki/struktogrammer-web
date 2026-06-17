@@ -16,8 +16,9 @@ Arbeitsstand und Fahrplan fuer die Web-App zum Erstellen von Nassi-Shneiderman-S
 - JSON-Baum als internes Datenmodell stabilisiert.
 - Kernbausteine fuer Struktogramme umgesetzt:
   Sequenz/Zuweisung, Deklaration und Initialisierung, Deklaration und Einlesen,
-  Einlesen, Ausgabe, Verzweigung, Mehrfachverzweigung, Wiederholung solange,
+  Ausgabe, Verzweigung, Mehrfachverzweigung, Wiederholung solange,
   Zaehlschleife/FOR und Subroutine/Funktion.
+- Der alte Einlesen-Typ bleibt fuer importierte Projekte kompatibel, ist aber nicht mehr als eigener Palette-Button sichtbar.
 - Verschachtelungen in Schleifen, Verzweigungen und Mehrfachverzweigungen ermoeglicht.
 - Beispiele als feste Startinhalte entfernt, damit die App als moegliches Hilfsmittel neutral bleibt.
 
@@ -56,29 +57,41 @@ Arbeitsstand und Fahrplan fuer die Web-App zum Erstellen von Nassi-Shneiderman-S
 - Programminfo bewusst auf "Designed by Sawazki Electronics" reduziert.
 - Hover-Hinweise fuer zentrale Symbolbuttons ergaenzt.
 
+### v0.7 - Bedienkomfort und Projektkennzeichnung
+
+- Titelbereich vergroessert und visuell als ruhige Eingabekarte hervorgehoben.
+- Vorhandene Struktogramm-Bausteine koennen direkt per Drag-and-drop im Struktogramm umgeordnet und in andere passende Bereiche verschoben werden.
+- Schutzlogik verhindert, dass Bausteine in sich selbst oder eigene Unterbereiche gezogen werden.
+- Hotkeys fuer Neu, Oeffnen, Speichern, Bildexport, Drucken, Pruefen, Hilfe und Modus ergaenzt.
+- Toolbar-Hinweise zeigen die passenden Hotkeys direkt mit an.
+- Dezenter Footer-Link "Designed by Sawazki Electronics" unten rechts ergaenzt.
+- Copyright-Hinweis in der Programminfo ergaenzt.
+- Palette weiter vereinfacht: "Einlesen" als eigener Button entfernt, "Deklaration und Einlesen" bleibt erhalten.
+- Baustein-Icons in der Palette klarer und fachlich besser erkennbar gestaltet.
+
 ## Offen / Naechste Schritte
 
-### v0.7 - Offline und Installation verbessern
+### v0.8 - Offline und Installation verbessern
 
 - Optional eine echte PWA mit `manifest.webmanifest` und Service Worker erstellen.
 - Offline-Download um ZIP-Variante mit Einzeldateien ergaenzen.
 - Eindeutige Versionsnummer in der Programminfo anzeigen.
 
-### v0.8 - Unterrichtstauglichkeit verfeinern
+### v0.9 - Unterrichtstauglichkeit verfeinern
 
 - Schreibweisen der Operatorenliste nochmals fachlich gegenpruefen.
 - Kurze Lehrkraft-Notizen fuer typische Python-Uebersetzungen ergaenzen.
 - Optionale, neutrale Mini-Hilfe fuer Mehrfachverzweigungen verbessern.
 - Export-Dateinamen und Drucklayout fuer Arbeitsblaetter weiter verfeinern.
 
-### v0.9 - Bedienkomfort
+### v0.10 - Bedienkomfort
 
 - Rueckgaengig/Wiederholen einfuehren.
 - Zoom fuer grosse Struktogramme ergaenzen.
 - Mehrere Elemente markieren und gemeinsam verschieben pruefen.
 - Bessere Tastaturbedienung fuer Einfuegezonen und Zweige ergaenzen.
 
-### v0.10 - Qualitaetssicherung
+### v0.11 - Qualitaetssicherung
 
 - Kleine automatisierte Smoke-Tests fuer Rendern, Export, Import und Offline-Download aufsetzen.
 - GitHub Actions fuer Syntaxcheck und statische Pruefungen einrichten.

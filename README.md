@@ -7,9 +7,10 @@ Python-Einstieg und Abiturvorbereitung reduziert.
 ## Funktionen
 
 - Fachlich getrennte Bausteine für Zuweisung, Deklaration und Initialisierung,
-  Deklaration und Einlesen, Einlesen und Ausgabe
+  Deklaration und Einlesen sowie Ausgabe
 - Verzweigung, Mehrfachverzweigung, While-Schleife, Zählschleife und Subroutine
 - Drag-and-drop in Hauptbereich, Schleifen und Dann-/Sonst-Zweige
+- Direktes Umordnen vorhandener Bausteine per Drag-and-drop im Struktogramm
 - Touch-Alternative durch Antippen von Baustein und Einfügeposition
 - Direkte Textbearbeitung sowie Duplizieren, Löschen und Verschieben
 - JSON-Dateien öffnen und speichern
@@ -23,6 +24,8 @@ Python-Einstieg und Abiturvorbereitung reduziert.
 - Offline-Download als eigenständige HTML-Datei
 - Scrollbares Operatoren-Blatt direkt in der App
 - Kurze Hover-Hinweise für die Symbolleiste
+- Tastenkürzel für Neu, Öffnen, Speichern, Bildexport, Drucken, Prüfen, Hilfe und Modus
+- Dezenter Design- und Copyright-Hinweis mit Link zu Sawazki Electronics
 
 ## Start
 
