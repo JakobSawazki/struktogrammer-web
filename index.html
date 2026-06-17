@@ -48,6 +48,11 @@
       <path d="M20.75 3.25h-7.5A2.5 2.5 0 0 0 11 4.65v16.1a2.5 2.5 0 0 1 2.25-1.4h7.5z"></path>
       <path d="M5.75 7h3M5.75 10h3M15.25 7h3M15.25 10h3M15.25 13h3"></path>
     </symbol>
+    <symbol id="icon-offline" viewBox="0 0 24 24">
+      <path d="M5 3.25h14a1.8 1.8 0 0 1 1.75 1.85v13.8A1.8 1.8 0 0 1 19 20.75H5a1.8 1.8 0 0 1-1.75-1.85V5.1A1.8 1.8 0 0 1 5 3.25z"></path>
+      <path d="M8 15.75h8M12 7.25v7M8.75 11.85 12 15.1l3.25-3.25"></path>
+      <path d="M7 6.75h2.5M14.5 6.75H17"></path>
+    </symbol>
     <symbol id="icon-print" viewBox="0 0 24 24">
       <path d="M6.75 8V2.75h10.5V8M6.75 17H4.5a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h15a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2.25"></path>
       <path d="M6.75 13.75h10.5v7.5H6.75zM18 11.25h.01M9.25 17h5.5"></path>
@@ -103,35 +108,39 @@
       </button>
 
       <nav class="toolbar" aria-label="Projektaktionen">
-        <button class="tool-button" id="newButton" type="button">
+        <button class="tool-button" id="newButton" type="button" data-tooltip="Leeres Struktogramm starten">
           <svg><use href="#icon-new"></use></svg>
           <span>Neu</span>
         </button>
-        <button class="tool-button" id="openButton" type="button">
+        <button class="tool-button" id="openButton" type="button" data-tooltip="JSON-Projektdatei öffnen">
           <svg><use href="#icon-open"></use></svg>
           <span>Öffnen</span>
         </button>
-        <button class="tool-button" id="saveButton" type="button">
+        <button class="tool-button" id="saveButton" type="button" data-tooltip="Struktogramm als JSON speichern">
           <svg><use href="#icon-save"></use></svg>
           <span>Speichern</span>
         </button>
-        <button class="tool-button" id="imageButton" type="button">
+        <button class="tool-button" id="imageButton" type="button" data-tooltip="Struktogramm als SVG oder PNG exportieren">
           <svg><use href="#icon-image"></use></svg>
           <span>Bild</span>
         </button>
-        <a class="tool-button" id="operatorListButton" href="https://www.schule-bw.de/faecher-und-schularten/mathematisch-naturwissenschaftliche-faecher/informatik/material/materialien-zum-neuen-bildungsplan-informatik-an-den-nichtgewerblichen-beruflichen-gymnasien/operatorenliste-fuer-struktogramme-v2-2.pdf" target="_blank" rel="noreferrer" title="Offizielle Operatorenliste öffnen">
+        <button class="tool-button" id="operatorListButton" type="button" data-tooltip="Operatorenliste als Übersicht anzeigen">
           <svg><use href="#icon-operators"></use></svg>
           <span>Operatoren</span>
-        </a>
-        <button class="tool-button" id="printButton" type="button">
+        </button>
+        <button class="tool-button" id="printButton" type="button" data-tooltip="Saubere Druckansicht öffnen">
           <svg><use href="#icon-print"></use></svg>
           <span>Drucken</span>
         </button>
-        <button class="tool-button" id="validateButton" type="button">
+        <button class="tool-button" id="validateButton" type="button" data-tooltip="Grundprüfung mit didaktischen Hinweisen starten">
           <svg><use href="#icon-check"></use></svg>
           <span>Prüfen</span>
         </button>
-        <button class="tool-button" id="themeButton" type="button" aria-pressed="false" title="Hell- oder Dunkelmodus wechseln">
+        <button class="tool-button" id="offlineDownloadButton" type="button" data-tooltip="Offline-Version als einzelne HTML-Datei herunterladen">
+          <svg><use href="#icon-offline"></use></svg>
+          <span>Offline</span>
+        </button>
+        <button class="tool-button" id="themeButton" type="button" aria-pressed="false" data-tooltip="Hell- oder Dunkelmodus wechseln">
           <svg><use href="#icon-theme"></use></svg>
           <span>Modus</span>
         </button>
@@ -251,11 +260,99 @@
           <span>Editor für Nassi-Shneiderman-Struktogramme</span>
         </div>
       </div>
-      <p>Designed und entwickelt von <a class="text-link" href="https://jakobsawazki.github.io/sawazki-electronics/" target="_blank" rel="noreferrer">Sawazki Electronics</a>.</p>
-      <p>Die Anwendung wurde für eine klare, zuverlässige und didaktisch verständliche Arbeit im Informatikunterricht gestaltet.</p>
-      <div class="imprint-actions">
-        <a href="https://jakobsawazki.github.io/sawazki-electronics/" target="_blank" rel="noreferrer">Sawazki Electronics öffnen</a>
-        <button id="offlineDownloadButton" type="button">Offline-Version herunterladen</button>
+      <p>Designed by <a class="text-link" href="https://jakobsawazki.github.io/sawazki-electronics/" target="_blank" rel="noreferrer">Sawazki Electronics</a>.</p>
+    </div>
+  </dialog>
+
+  <dialog class="modal operator-modal" id="operatorDialog">
+    <div class="operator-sheet">
+      <div class="operator-sheet-header">
+        <div>
+          <span class="eyebrow">Operatorenliste</span>
+          <h2>Struktogramm-Operatoren</h2>
+          <p>Kurzübersicht nach der offiziellen Operatorenliste für Struktogramme der Abiturprüfung Baden-Württemberg, Version 2.2 vom 01.09.2024.</p>
+        </div>
+        <button class="icon-button" type="button" data-close-dialog="operatorDialog" aria-label="Operatorenliste schließen">
+          <svg><use href="#icon-close"></use></svg>
+        </button>
+      </div>
+      <div class="operator-sheet-body">
+        <section class="operator-note">
+          <strong>Hinweis</strong>
+          <span>Platzhalter wie Variable, Datentyp, Wert oder Bedingung werden im Unterricht durch konkrete Namen, Werte oder Ausdrücke ersetzt. Kontrollstrukturen dürfen verschachtelt werden.</span>
+        </section>
+        <div class="operator-grid">
+          <article>
+            <span>Daten</span>
+            <h3>Deklaration</h3>
+            <code>Deklaration: Variable als Datentyp</code>
+            <p>Eine Variable wird angelegt; die Angabe des Datentyps kann ergänzt werden.</p>
+          </article>
+          <article>
+            <span>Daten</span>
+            <h3>Initialisierung</h3>
+            <code>Initialisierung: Variable = Wert</code>
+            <p>Eine Variable erhält einen Startwert oder das Ergebnis einer Berechnung.</p>
+          </article>
+          <article>
+            <span>Daten</span>
+            <h3>Deklaration und Initialisierung</h3>
+            <code>Deklaration und Initialisierung: Variable als Datentyp = Wert</code>
+            <p>Anlegen und Startwert setzen werden in einem Schritt notiert.</p>
+          </article>
+          <article>
+            <span>Anweisung</span>
+            <h3>Zuweisung</h3>
+            <code>Zuweisung: Element = Wert</code>
+            <p>Einem Element wird ein Wert oder ein berechneter Ausdruck zugewiesen.</p>
+          </article>
+          <article>
+            <span>Ein-/Ausgabe</span>
+            <h3>Einlesen</h3>
+            <code>Einlesen: Variable als Datentyp</code>
+            <p>Ein Wert wird eingelesen; bei Bedarf direkt mit Deklaration kombiniert.</p>
+          </article>
+          <article>
+            <span>Ein-/Ausgabe</span>
+            <h3>Ausgabe</h3>
+            <code>Ausgabe: Inhalt</code>
+            <p>Texte, Variablen, Arrays oder zusammengesetzte Ausdrücke werden ausgegeben.</p>
+          </article>
+          <article>
+            <span>Unterprogramm</span>
+            <h3>Aufruf / Rückgabe</h3>
+            <code>Aufruf: Funktion(Parameter)</code>
+            <p>Funktionen, Methoden oder Unterprogramme werden aufgerufen; Rückgabewerte können separat notiert werden.</p>
+          </article>
+          <article>
+            <span>Kontrolle</span>
+            <h3>Verzweigung</h3>
+            <code>Wenn Bedingung, dann …, sonst …</code>
+            <p>Bedingungen nutzen Vergleichsoperatoren wie ==, !=, &lt;, &lt;=, &gt; oder &gt;= sowie AND, OR und NOT.</p>
+          </article>
+          <article>
+            <span>Kontrolle</span>
+            <h3>Wiederholung solange</h3>
+            <code>Wiederhole solange Bedingung</code>
+            <p>Eine kopfgesteuerte Schleife prüft die Bedingung vor jedem Durchlauf.</p>
+          </article>
+          <article>
+            <span>Kontrolle</span>
+            <h3>Zählschleife</h3>
+            <code>Zähle i von Startwert bis Endwert, Schrittweite Schrittweite</code>
+            <p>Eine zählergesteuerte Schleife wiederholt einen Block über eine Zählvariable.</p>
+          </article>
+          <article>
+            <span>Arrays</span>
+            <h3>Array-Operationen</h3>
+            <code>Zuweisung: Array[Index] = Wert</code>
+            <p>Arrayelemente können zugewiesen, angehängt, gezählt oder einzeln ausgegeben werden.</p>
+          </article>
+        </div>
+        <footer class="operator-sheet-footer">
+          <span>Originaldokument des Landesbildungsservers Baden-Württemberg</span>
+          <a href="https://www.schule-bw.de/faecher-und-schularten/mathematisch-naturwissenschaftliche-faecher/informatik/material/materialien-zum-neuen-bildungsplan-informatik-an-den-nichtgewerblichen-beruflichen-gymnasien/operatorenliste-fuer-struktogramme-v2-2.pdf" target="_blank" rel="noreferrer">Offizielle PDF-Operatorenliste öffnen</a>
+        </footer>
       </div>
     </div>
   </dialog>

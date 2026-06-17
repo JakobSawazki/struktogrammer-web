@@ -158,6 +158,7 @@ function cacheDom() {
     helpDialog: document.getElementById('helpDialog'),
     imprintDialog: document.getElementById('imprintDialog'),
     offlineDownloadButton: document.getElementById('offlineDownloadButton'),
+    operatorDialog: document.getElementById('operatorDialog'),
     exportDialog: document.getElementById('exportDialog'),
     validationDialog: document.getElementById('validationDialog'),
     validationResults: document.getElementById('validationResults'),
@@ -177,6 +178,7 @@ function bindEvents() {
   document.getElementById('printButton').addEventListener('click', printDiagram);
   document.getElementById('helpButton').addEventListener('click', () => dom.helpDialog.showModal());
   document.getElementById('validateButton').addEventListener('click', showValidation);
+  document.getElementById('operatorListButton').addEventListener('click', () => dom.operatorDialog.showModal());
   dom.themeButton.addEventListener('click', toggleTheme);
   document.getElementById('exportSvgButton').addEventListener('click', exportDiagramAsSvg);
   document.getElementById('exportPngButton').addEventListener('click', exportDiagramAsPng);
@@ -221,7 +223,7 @@ function applyTheme(theme, persist) {
   document.documentElement.dataset.theme = selectedTheme;
   dom.themeButton?.setAttribute('aria-pressed', String(selectedTheme === 'dark'));
   if (dom.themeButton) {
-    dom.themeButton.title = selectedTheme === 'dark'
+    dom.themeButton.dataset.tooltip = selectedTheme === 'dark'
       ? 'Zum Hellmodus wechseln'
       : 'Zum Dunkelmodus wechseln';
   }

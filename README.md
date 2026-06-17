@@ -21,6 +21,8 @@ Python-Einstieg und Abiturvorbereitung reduziert.
 - Umschaltbarer, lokal gespeicherter Hell- und Dunkelmodus
 - Programminfo mit Verweis auf Sawazki Electronics
 - Offline-Download als eigenständige HTML-Datei
+- Scrollbares Operatoren-Blatt direkt in der App
+- Kurze Hover-Hinweise für die Symbolleiste
 
 ## Start
 
