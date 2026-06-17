@@ -24,7 +24,7 @@ const ELEMENT_TYPES = {
     label: 'Anweisung / Zuweisung',
     shortLabel: 'Anweisung',
     summary: 'Wert berechnen oder zuweisen',
-    defaultText: 'Zuweisung: *Variable* = *Wert*',
+    defaultText: 'Zuweisung: Variable = Wert',
     help: 'Eine Sequenz ist eine einfache Anweisung, die der Reihe nach ausgeführt wird.',
     icon: 'sequence'
   },
@@ -32,7 +32,7 @@ const ELEMENT_TYPES = {
     label: 'Deklaration + Initialisierung',
     shortLabel: 'Deklaration',
     summary: 'Variable anlegen und Startwert setzen',
-    defaultText: 'Deklaration und Initialisierung: *Variable* als *Datentyp* = *Wert*',
+    defaultText: 'Deklaration und Initialisierung: Variable als Datentyp = Wert',
     help: 'Eine Variable wird mit Datentyp deklariert und erhält direkt einen Anfangswert.',
     icon: 'declarationInitialization'
   },
@@ -40,7 +40,7 @@ const ELEMENT_TYPES = {
     label: 'Deklaration + Einlesen',
     shortLabel: 'Deklaration und Einlesen',
     summary: 'Variable anlegen und Wert einlesen',
-    defaultText: 'Deklaration und Einlesen: *Variable* als *Datentyp*',
+    defaultText: 'Deklaration und Einlesen: Variable als Datentyp',
     help: 'Eine Variable wird deklariert und ihr Wert anschließend eingelesen.',
     icon: 'declarationInput'
   },
@@ -48,7 +48,7 @@ const ELEMENT_TYPES = {
     label: 'Einlesen',
     shortLabel: 'Einlesen',
     summary: 'Wert in vorhandene Variable einlesen',
-    defaultText: 'Einlesen: *Variable*',
+    defaultText: 'Einlesen: Variable',
     help: 'Eine Eingabe liest einen Wert ein, zum Beispiel über input() im Python-Unterricht.',
     icon: 'input'
   },
@@ -56,7 +56,7 @@ const ELEMENT_TYPES = {
     label: 'Ausgabe',
     shortLabel: 'Ausgabe',
     summary: 'Text oder Werte ausgeben',
-    defaultText: 'Ausgabe: *Inhalt*',
+    defaultText: 'Ausgabe: Inhalt',
     help: 'Eine Ausgabe entspricht im Python-Unterricht häufig einem print()-Befehl.',
     icon: 'output'
   },
@@ -64,7 +64,7 @@ const ELEMENT_TYPES = {
     label: 'Verzweigung / IF-ELSE',
     shortLabel: 'Verzweigung',
     summary: 'Bedingung mit Dann- und Sonst-Zweig',
-    defaultText: 'Wenn *Bedingung*',
+    defaultText: 'Wenn Bedingung',
     help: 'Eine Entscheidung führt abhängig von einer Bedingung den Dann- oder den Sonst-Zweig aus.',
     icon: 'decision'
   },
@@ -72,7 +72,7 @@ const ELEMENT_TYPES = {
     label: 'Mehrfachverzweigung',
     shortLabel: 'Mehrfachverzweigung',
     summary: 'Mehrere Fälle einer Auswahl darstellen',
-    defaultText: 'Fallunterscheidung nach *Ausdruck*',
+    defaultText: 'Fallunterscheidung nach Ausdruck',
     help: 'Eine Mehrfachverzweigung wählt abhängig von einem Ausdruck genau einen von mehreren Fällen aus.',
     icon: 'switch'
   },
@@ -80,7 +80,7 @@ const ELEMENT_TYPES = {
     label: 'Wiederholung solange',
     shortLabel: 'While-Schleife',
     summary: 'Kopfgesteuerte Schleife',
-    defaultText: 'Wiederhole solange *Bedingung*',
+    defaultText: 'Wiederhole solange Bedingung',
     help: 'Diese Schleife prüft zuerst die Bedingung. Nur wenn sie wahr ist, wird der Schleifenkörper ausgeführt.',
     icon: 'while'
   },
@@ -88,7 +88,7 @@ const ELEMENT_TYPES = {
     label: 'Zählschleife / FOR',
     shortLabel: 'Zählschleife',
     summary: 'Wiederholung mit Zählvariable',
-    defaultText: 'Zähle *i* von *Startwert* bis *Endwert*, Schrittweite *Schrittweite*',
+    defaultText: 'Zähle i von Startwert bis Endwert, Schrittweite Schrittweite',
     help: 'Diese Schleife eignet sich, wenn die Anzahl der Wiederholungen über eine Zählvariable gesteuert wird.',
     icon: 'for'
   },
@@ -96,7 +96,7 @@ const ELEMENT_TYPES = {
     label: 'Subroutine / Funktion',
     shortLabel: 'Subroutine',
     summary: 'Funktion aufrufen oder Wert zurückgeben',
-    defaultText: 'Aufruf: *Funktion*()',
+    defaultText: 'Aufruf: Funktion()',
     help: 'Eine Subroutine ist ein Unterprogramm. In Python entspricht dies häufig einem Funktionsaufruf.',
     icon: 'subroutine'
   }
@@ -157,6 +157,7 @@ function cacheDom() {
     fileInput: document.getElementById('fileInput'),
     helpDialog: document.getElementById('helpDialog'),
     imprintDialog: document.getElementById('imprintDialog'),
+    offlineDownloadButton: document.getElementById('offlineDownloadButton'),
     exportDialog: document.getElementById('exportDialog'),
     validationDialog: document.getElementById('validationDialog'),
     validationResults: document.getElementById('validationResults'),
@@ -180,6 +181,7 @@ function bindEvents() {
   document.getElementById('exportSvgButton').addEventListener('click', exportDiagramAsSvg);
   document.getElementById('exportPngButton').addEventListener('click', exportDiagramAsPng);
   document.getElementById('brandLink').addEventListener('click', () => dom.imprintDialog.showModal());
+  dom.offlineDownloadButton.addEventListener('click', downloadOfflineStandalone);
 
   dom.diagramTitle.addEventListener('change', updateDiagramTitle);
   dom.fileInput.addEventListener('change', importDiagramFromJson);
@@ -520,7 +522,7 @@ function createEditableText(element) {
 
   const text = document.createElement('span');
   text.className = 'ns-text';
-  appendFormattedText(text, element.text);
+  text.textContent = element.text;
   text.tabIndex = 0;
   text.setAttribute('role', 'button');
   text.title = 'Doppelklick zum Bearbeiten';
@@ -535,19 +537,6 @@ function createEditableText(element) {
     }
   });
   return text;
-}
-
-function appendFormattedText(container, value) {
-  splitFormattedText(value).forEach(segment => {
-    if (!segment.bold) {
-      container.append(document.createTextNode(segment.text));
-      return;
-    }
-
-    const strong = document.createElement('strong');
-    strong.textContent = segment.text;
-    container.append(strong);
-  });
 }
 
 function createEditableBranchLabel(element, branch) {
@@ -1268,6 +1257,68 @@ function exportDiagramAsPng() {
   }
 }
 
+async function downloadOfflineStandalone() {
+  try {
+    const offlineHtml = location.protocol === 'file:'
+      ? `<!doctype html>\n${document.documentElement.outerHTML}`
+      : await createOfflineStandaloneHtml();
+    downloadBlob(offlineHtml, 'struktogrammer-web-offline.html', 'text/html');
+    showToast('Offline-Version erstellt.');
+  } catch (error) {
+    console.error(error);
+    showToast('Offline-Version konnte nicht erstellt werden.');
+  }
+}
+
+async function createOfflineStandaloneHtml() {
+  const [html, css, js, logo, favicon32, favicon64, appleIcon] = await Promise.all([
+    fetchTextAsset('index.html'),
+    fetchTextAsset('style.css'),
+    fetchTextAsset('script.js'),
+    fetchDataUrlAsset('assets/brand/struktogrammer-mark.png'),
+    fetchDataUrlAsset('assets/brand/favicon-32.png'),
+    fetchDataUrlAsset('assets/brand/favicon-64.png'),
+    fetchDataUrlAsset('assets/brand/apple-touch-icon.png')
+  ]);
+
+  return html
+    .replace(/<link rel="stylesheet" href="style\.css">\s*/i, `<style>\n${css}\n</style>\n`)
+    .replace(/<script src="script\.js"><\/script>/i, `<script>\n${escapeScriptForHtml(js)}\n</script>`)
+    .replaceAll('assets/brand/struktogrammer-mark.png', logo)
+    .replaceAll('assets/brand/favicon-32.png', favicon32)
+    .replaceAll('assets/brand/favicon-64.png', favicon64)
+    .replaceAll('assets/brand/apple-touch-icon.png', appleIcon);
+}
+
+async function fetchTextAsset(path) {
+  const response = await fetch(new URL(path, location.href), { cache: 'no-store' });
+  if (!response.ok) throw new Error(`Asset konnte nicht geladen werden: ${path}`);
+  return response.text();
+}
+
+async function fetchDataUrlAsset(path) {
+  const response = await fetch(new URL(path, location.href), { cache: 'no-store' });
+  if (!response.ok) throw new Error(`Asset konnte nicht geladen werden: ${path}`);
+  const mimeType = response.headers.get('content-type') || 'application/octet-stream';
+  const buffer = await response.arrayBuffer();
+  return `data:${mimeType};base64,${arrayBufferToBase64(buffer)}`;
+}
+
+function arrayBufferToBase64(buffer) {
+  const bytes = new Uint8Array(buffer);
+  let binary = '';
+  const chunkSize = 0x8000;
+  for (let index = 0; index < bytes.length; index += chunkSize) {
+    const chunk = bytes.subarray(index, index + chunkSize);
+    binary += String.fromCharCode(...chunk);
+  }
+  return btoa(binary);
+}
+
+function escapeScriptForHtml(script) {
+  return script.replace(/<\/script/gi, '<\\/script');
+}
+
 function createExportSvg() {
   const width = 1000;
   const outerX = 2;
@@ -1459,13 +1510,9 @@ function renderSvgText(lines, x, y, options = {}) {
   const size = options.size || 16;
   const lineHeight = options.lineHeight || 21;
   const weight = options.weight || 400;
-  const spans = lines.map((line, index) => {
-    const segments = splitFormattedText(line).map(segment => {
-      const segmentWeight = segment.bold ? ' font-weight="800"' : '';
-      return `<tspan${segmentWeight}>${escapeXml(segment.text)}</tspan>`;
-    }).join('');
-    return `<tspan x="${x}" dy="${index === 0 ? 0 : lineHeight}">${segments}</tspan>`;
-  }).join('');
+  const spans = lines.map((line, index) =>
+    `<tspan x="${x}" dy="${index === 0 ? 0 : lineHeight}">${escapeXml(line)}</tspan>`
+  ).join('');
   return `<text x="${x}" y="${y}" text-anchor="${anchor}" font-family="Arial, Segoe UI, sans-serif" font-size="${size}" font-weight="${weight}" fill="#121926">${spans}</text>`;
 }
 
@@ -1482,8 +1529,7 @@ function wrapSvgText(value, maxCharacters) {
 
     let line = '';
     words.forEach(word => {
-      const formattedWord = /\*[^*\n]+\*/.test(word);
-      if (stripFormatting(word).length > maxCharacters && !formattedWord) {
+      if (word.length > maxCharacters) {
         if (line) {
           result.push(line);
           line = '';
@@ -1495,7 +1541,7 @@ function wrapSvgText(value, maxCharacters) {
       }
 
       const candidate = line ? `${line} ${word}` : word;
-      if (stripFormatting(candidate).length > maxCharacters && line) {
+      if (candidate.length > maxCharacters && line) {
         result.push(line);
         line = word;
       } else {
@@ -1506,32 +1552,6 @@ function wrapSvgText(value, maxCharacters) {
   });
 
   return result.length ? result : [''];
-}
-
-function splitFormattedText(value) {
-  const text = String(value);
-  const segments = [];
-  const pattern = /\*([^*\n]+)\*/g;
-  let cursor = 0;
-  let match;
-
-  while ((match = pattern.exec(text)) !== null) {
-    if (match.index > cursor) {
-      segments.push({ text: text.slice(cursor, match.index), bold: false });
-    }
-    segments.push({ text: match[1], bold: true });
-    cursor = pattern.lastIndex;
-  }
-
-  if (cursor < text.length) {
-    segments.push({ text: text.slice(cursor), bold: false });
-  }
-
-  return segments.length ? segments : [{ text: '', bold: false }];
-}
-
-function stripFormatting(value) {
-  return splitFormattedText(value).map(segment => segment.text).join('');
 }
 
 function escapeXml(value) {
@@ -1672,7 +1692,7 @@ function showToast(message) {
 }
 
 function shorten(value, maxLength) {
-  const text = stripFormatting(value).replace(/\s+/g, ' ').trim();
+  const text = String(value).replace(/\s+/g, ' ').trim();
   return text.length > maxLength ? `${text.slice(0, maxLength - 1)}…` : text;
 }
 
